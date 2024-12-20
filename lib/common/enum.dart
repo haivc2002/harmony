@@ -1,0 +1,2 @@
+
+enum Be {height, width}
