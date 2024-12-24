@@ -24,3 +24,4 @@ export 'package:harmony/base_project/base_controller.dart';
 export 'package:harmony/base_project/base_view.dart';
 export 'package:harmony/base_project/language/vi.dart';
 export 'package:harmony/base_project/language/en.dart';
+export 'package:cached_network_image/cached_network_image.dart';

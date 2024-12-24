@@ -1,8 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:harmony/base_project/package_widget.dart';
-import 'package:harmony/view/home/home_screen.dart';
 import 'package:harmony/view/login/bloc/login_bloc.dart';
+import 'package:harmony/view/tab_multi/tab_multi_screen.dart';
 
 import '../../model/response/model_info_user.dart';
 
@@ -44,7 +44,8 @@ class OnLogin extends LoginController {
   }
 
   void perform(LoginState state, BaseState system) async {
-    Navigator.pushNamed(context, HomeScreen.router);
+    Navigator.pushNamedAndRemoveUntil(context, TabMultiScreen.router, (route) => false);
+    // Navigator.pushNamed(context, HomeScreen.router);
     // Common.popupError(context);
     // if(_check(state, system)) {
     //   final response = await postLogin(emailController.text, passController.text);

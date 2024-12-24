@@ -6,6 +6,7 @@ class Language {
   String password;
   String emailEmpty;
   String passwordEmpty;
+  String titleHome;
 
   Language({
     required this.hasAccount,
@@ -15,6 +16,7 @@ class Language {
     required this.password,
     required this.emailEmpty,
     required this.passwordEmpty,
+    required this.titleHome
   });
 
   factory Language.fromMap(Map<String, String> map) {
@@ -26,6 +28,7 @@ class Language {
         password: map['password'] ?? '',
         emailEmpty: map['emailEmpty'] ?? '',
         passwordEmpty: map['passwordEmpty'] ?? '',
+        titleHome: map['titleHome'] ?? ''
     );
   }
 
@@ -38,6 +41,7 @@ class Language {
       'password': password,
       'emailEmpty': emailEmpty,
       'passwordEmpty': passwordEmpty,
+      'titleHome': titleHome
     };
   }
 }

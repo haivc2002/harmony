@@ -8,5 +8,6 @@ class Vi {
     'password': 'Mật khẩu',
     'emailEmpty': 'Vui lòng nhập email!',
     'passwordEmpty': 'Vui lòng nhập mật khẩu!',
+    'titleHome': 'Trang chủ'
   };
 }
