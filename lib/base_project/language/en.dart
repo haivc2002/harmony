@@ -8,6 +8,9 @@ class En {
     'password': 'Password',
     'emailEmpty': 'Please enter email!',
     'passwordEmpty': 'Please enter password!',
-    'titleHome': 'Home'
+    'titleHome': 'Home',
+    'titleMatch': 'Match',
+    'titleMessage': 'Message',
+    'titleProfile': 'Profile',
   };
 }

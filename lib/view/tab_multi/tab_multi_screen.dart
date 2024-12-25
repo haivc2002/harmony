@@ -1,10 +1,7 @@
-import 'dart:ui';
-
+import 'package:flutter/cupertino.dart';
 import 'package:harmony/base_project/package_widget.dart';
-import 'package:harmony/view/tab_multi/bloc/tab_multi_bloc.dart';
+import 'package:harmony/view/home/home_screen.dart';
 import 'package:harmony/view/tab_multi/tab_multi_controller.dart';
-import 'package:harmony/view/tab_multi/tab_multi_drawer.dart';
-import 'package:harmony/view/tab_multi/tab_multi_menu.dart';
 
 
 class TabMultiScreen extends BaseView<TabMultiController> {
@@ -16,37 +13,51 @@ class TabMultiScreen extends BaseView<TabMultiController> {
 
   @override
   Widget build(BuildContext context, BaseState system, TabMultiController controller) {
-    return BlocBuilder<TabMultiBloc, TabMultiState>(
-      builder: (context, state) {
-        return Scaffold(
-          drawer: const TabMultiDrawer(),
-          body: Stack(
-            children: [
-              PageView.builder(
-                controller: controller.pageController,
-                itemCount: controller.linkList.getList(state).length,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) => controller.linkList.getList(state)[index],
-              ),
-              Positioned(
-                bottom: 20.w,
-                right: 17.w,
-                left: 17.w,
-                child: TabMultiMenu(state: state, controller: controller),
-              ),
-              Center(
-                child: Builder(
-                  builder: (context) {
-                    return ElevatedButton(onPressed: () {
-                      Scaffold.of(context).openDrawer();
-                    }, child: Text("data"));
-                  }
-                ),
-              )
-            ],
-          ),
-        );
-      }
+    return WidgetTabScreen(
+      backGround: system.colorUi.deep,
+      listPage: [
+        WidgetListPage(
+            page: const HomeScreen(),
+            bottomIcon: Icons.favorite,
+            name: system.language.titleHome
+        ),
+        WidgetListPage(
+            page: Container(),
+            bottomIcon: Icons.dashboard,
+            name: system.language.titleMatch
+        ),
+        WidgetListPage(
+            page: Container(color: MyColor.white),
+            bottomIcon: CupertinoIcons.chat_bubble_fill,
+            name: system.language.titleMessage
+        ),
+        WidgetListPage(
+            page: Container(color: MyColor.white),
+            bottomIcon: Icons.person,
+            name: system.language.titleProfile
+        ),
+      ],
+      drawer: WidgetDrawer(
+          header: Container(),
+          backGroundColor: system.colorUi.drawer,
+          children: [
+            IconButton(
+                onPressed: ()=> controller.onChangeColorUi(themeUi: ThemeUi.light),
+                icon: Icon(CupertinoIcons.add)
+            ),
+            IconButton(
+                onPressed: ()=> controller.onChangeColorUi(themeUi: ThemeUi.dark),
+                icon: Icon(CupertinoIcons.add)
+            ),
+            SwitchListTile(
+                value: true,
+                title: Text("data"),
+                activeColor: MyColor.white,
+                activeTrackColor: MyColor.pink,
+                onChanged: (value) {},
+            )
+          ]
+      )
     );
   }
 

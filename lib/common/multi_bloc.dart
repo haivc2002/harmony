@@ -13,6 +13,7 @@ class MultiBloc extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => BaseBloc(), lazy: true),
+        BlocProvider(create: (context) => WidgetBloc(), lazy: true),
         BlocProvider(create: (context) => LoginBloc(), lazy: true),
         BlocProvider(create: (context) => TabMultiBloc(), lazy: true),
       ],

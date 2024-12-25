@@ -8,6 +8,9 @@ class Vi {
     'password': 'Mật khẩu',
     'emailEmpty': 'Vui lòng nhập email!',
     'passwordEmpty': 'Vui lòng nhập mật khẩu!',
-    'titleHome': 'Trang chủ'
+    'titleHome': 'Trang chủ',
+    'titleMatch': 'Kết đôi',
+    'titleMessage': 'Tin nhắn',
+    'titleProfile': 'Thông tin',
   };
 }

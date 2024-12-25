@@ -17,6 +17,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   // await FirebaseApi().initNotification();
+  await Global.load();
   runApp(const MultiBloc(child: MyApp()));
 }
 

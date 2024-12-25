@@ -7,6 +7,9 @@ class Language {
   String emailEmpty;
   String passwordEmpty;
   String titleHome;
+  String titleMatch;
+  String titleMessage;
+  String titleProfile;
 
   Language({
     required this.hasAccount,
@@ -16,7 +19,10 @@ class Language {
     required this.password,
     required this.emailEmpty,
     required this.passwordEmpty,
-    required this.titleHome
+    required this.titleHome,
+    required this.titleMatch,
+    required this.titleMessage,
+    required this.titleProfile,
   });
 
   factory Language.fromMap(Map<String, String> map) {
@@ -28,7 +34,10 @@ class Language {
         password: map['password'] ?? '',
         emailEmpty: map['emailEmpty'] ?? '',
         passwordEmpty: map['passwordEmpty'] ?? '',
-        titleHome: map['titleHome'] ?? ''
+        titleHome: map['titleHome'] ?? '',
+        titleMatch: map['titleMatch'] ?? '',
+        titleMessage: map['titleMessage'] ?? '',
+        titleProfile: map['titleProfile'] ?? '',
     );
   }
 
@@ -41,7 +50,10 @@ class Language {
       'password': password,
       'emailEmpty': emailEmpty,
       'passwordEmpty': passwordEmpty,
-      'titleHome': titleHome
+      'titleHome': titleHome,
+      'titleMatch': titleMatch,
+      'titleMessage': titleMessage,
+      'titleProfile': titleProfile,
     };
   }
 }
