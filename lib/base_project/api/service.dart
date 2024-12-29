@@ -1,4 +1,3 @@
-import 'package:harmony/base_project/api/exception.dart';
 import 'package:harmony/base_project/package_widget.dart';
 
 class Service {

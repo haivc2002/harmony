@@ -12,5 +12,6 @@ class Vi {
     'titleMatch': 'Kết đôi',
     'titleMessage': 'Tin nhắn',
     'titleProfile': 'Thông tin',
+    'drawerDarkMode': 'Sử dụng giao diện tối'
   };
 }

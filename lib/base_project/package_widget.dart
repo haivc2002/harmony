@@ -31,3 +31,5 @@ export 'package:harmony/base_project/color_ui/theme_ui.dart';
 export 'package:shared_preferences/shared_preferences.dart';
 export 'package:harmony/common/constant.dart';
 export 'package:harmony/common/global.dart';
+export 'package:auto_size_text/auto_size_text.dart';
+export 'package:swipable_stack/swipable_stack.dart';

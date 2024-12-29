@@ -87,8 +87,11 @@ class WidgetBodyScroll extends StatelessWidget {
   Widget _body(BuildContext context) {
     return ListView(
       physics: scrollPhysics ?? const BouncingScrollPhysics().applyTo(const AlwaysScrollableScrollPhysics()),
-      padding: padding ?? EdgeInsets.only(bottom: 50.w, top: 110.w, left: 10, right: 10),
-      children: bodyListWidget ?? []
+      padding: padding ?? EdgeInsets.only(bottom: 50.w, top: 10.w, left: 10, right: 10),
+      children: [
+        SizedBox(height: 100.w),
+        ...bodyListWidget ?? []
+      ]
     );
   }
 }

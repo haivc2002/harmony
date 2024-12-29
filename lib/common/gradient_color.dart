@@ -8,4 +8,12 @@ extension GradientColor on LinearGradient {
         end: Alignment.bottomCenter
     );
   }
+
+  static LinearGradient get blackBackgroundNameHuman {
+    return LinearGradient(
+        colors: [MyColor.black, MyColor.black.withOpacity(0)],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter
+    );
+  }
 }

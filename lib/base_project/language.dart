@@ -10,6 +10,7 @@ class Language {
   String titleMatch;
   String titleMessage;
   String titleProfile;
+  String drawerDarkMode;
 
   Language({
     required this.hasAccount,
@@ -23,6 +24,7 @@ class Language {
     required this.titleMatch,
     required this.titleMessage,
     required this.titleProfile,
+    required this.drawerDarkMode
   });
 
   factory Language.fromMap(Map<String, String> map) {
@@ -38,6 +40,7 @@ class Language {
         titleMatch: map['titleMatch'] ?? '',
         titleMessage: map['titleMessage'] ?? '',
         titleProfile: map['titleProfile'] ?? '',
+        drawerDarkMode: map['drawerDarkMode'] ?? '',
     );
   }
 
@@ -54,6 +57,7 @@ class Language {
       'titleMatch': titleMatch,
       'titleMessage': titleMessage,
       'titleProfile': titleProfile,
+      'drawerDarkMode': drawerDarkMode
     };
   }
 }

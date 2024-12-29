@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import '../base_project/package_widget.dart';
@@ -44,19 +45,31 @@ class WidgetTabScreenState extends State<WidgetTabScreen> with SingleTickerProvi
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    animationController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<WidgetBloc, _WidgetState>(
       builder: (context, state) {
-        return Scaffold(
-          backgroundColor: widget.backGround,
-          body: Stack(
-            children: [
-              _screen(state),
-              _touchingCloseDrawer(state),
-              _drawer(state),
-              if(state.scaleValue != 0) _touchingArea(),
-            ],
-          ),
+        return TweenAnimationBuilder(
+          duration: const Duration(milliseconds: 300),
+          tween: ColorTween(end: widget.backGround, begin: widget.backGround),
+          builder: (context, value, child) {
+            return Scaffold(
+              backgroundColor: value,
+              body: Stack(
+                children: [
+                  _screen(state),
+                  _touchingCloseDrawer(state),
+                  _drawer(state),
+                  if(state.scaleValue != 0) _touchingArea(),
+                ],
+              ),
+            );
+          }
         );
       }
     );
@@ -121,15 +134,16 @@ class WidgetTabScreenState extends State<WidgetTabScreen> with SingleTickerProvi
           );
         },
         child: Padding(
-          padding: EdgeInsets.fromLTRB(12.w, 50.w, 0, 12.w),
+          padding: EdgeInsets.fromLTRB(10.w, 50.w, 0, 10.w),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(13.w),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-              child: Container(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
                 width: widget.drawer.width,
                 decoration: BoxDecoration(
-                  color: widget.drawer.backGroundColor?.withOpacity(0.7) ?? Colors.black45,
+                  color: widget.drawer.backGroundColor?.withOpacity(0.6) ?? Colors.black45,
                   border: Border.all(color: widget.drawer.backGroundColor ?? MyColor.black, width: 2),
                   borderRadius: BorderRadius.circular(13.w)
                 ),
@@ -191,7 +205,7 @@ class _WidgetTabController {
     if (pageController.hasClients) {
       await pageController.previousPage(
         duration: Duration(milliseconds: _durationDefault * 2),
-        curve: Curves.ease,
+        curve: Curves.fastOutSlowIn,
       );
       Future.delayed(const Duration(milliseconds: 300), ()=> _removeLast());
     }
@@ -268,13 +282,13 @@ class _WidgetTabMenu extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(100.w),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
         child: Container(
           height: 50.w,
           padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 6.w),
           decoration: BoxDecoration(
               border: Border.all(color: Colors.grey.withOpacity(0.4)),
-              color: Colors.black54,
+              color: MyColor.black.withOpacity(0.4),
               borderRadius: BorderRadius.circular(100.w)
           ),
           child: Stack(
@@ -345,7 +359,12 @@ class _WidgetState {
   int currentIndex;
   double scaleValue;
 
-  _WidgetState({this.head, this.canAct = true, this.currentIndex = 0, this.scaleValue = 0});
+  _WidgetState({
+    this.head,
+    this.canAct = true,
+    this.currentIndex = 0,
+    this.scaleValue = 0,
+  });
 }
 
 class _WidgetEvent {
@@ -364,7 +383,7 @@ class WidgetBloc extends Bloc<_WidgetEvent, _WidgetState> {
           head: event.head ?? state.head,
           canAct: event.canAct ?? state.canAct,
           currentIndex: event.currentIndex ?? state.currentIndex,
-          scaleValue: event.scaleValue ?? state.scaleValue
+          scaleValue: event.scaleValue ?? state.scaleValue,
       ));
     });
   }

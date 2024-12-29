@@ -1,3 +1,4 @@
+import 'package:harmony/view/home/bloc/home_bloc.dart';
 import 'package:harmony/view/login/bloc/login_bloc.dart';
 
 import '../base_project/package_widget.dart';
@@ -16,6 +17,7 @@ class MultiBloc extends StatelessWidget {
         BlocProvider(create: (context) => WidgetBloc(), lazy: true),
         BlocProvider(create: (context) => LoginBloc(), lazy: true),
         BlocProvider(create: (context) => TabMultiBloc(), lazy: true),
+        BlocProvider(create: (context) => HomeBloc(), lazy: true),
       ],
       child: child
     );

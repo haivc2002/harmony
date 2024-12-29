@@ -12,5 +12,6 @@ class En {
     'titleMatch': 'Match',
     'titleMessage': 'Message',
     'titleProfile': 'Profile',
+    'drawerDarkMode': 'Use a dark theme'
   };
 }

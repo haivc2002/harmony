@@ -5,9 +5,17 @@ class BaseController {
   BuildContext context;
   BaseController(this.context);
 
+  final args = null;
+
   void create(BuildContext context) {
     this.context = context;
     onInitState();
+  }
+
+  T? onCreateArgument<T>() {
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is T) return args;
+    return null;
   }
 
   void onInitState() {}
