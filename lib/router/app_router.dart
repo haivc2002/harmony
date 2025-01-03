@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:harmony/view/tab_multi/tab_multi_screen.dart';
+import '../view/explorer/explorer_screen.dart';
 import '../view/home/home_screen.dart';
 import '../view/login/login_screen.dart';
 import '../view/match/match_screen.dart';
@@ -52,6 +53,12 @@ class AppRouter {
         return CupertinoPageRoute(
             settings: settings,
             builder: (_) => const MessageViewScreen()
+        );
+
+      case ExplorerScreen.router:
+        return CupertinoPageRoute(
+            settings: settings,
+            builder: (_) => const ExplorerScreen()
         );
 
       default:

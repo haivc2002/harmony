@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:harmony/base_project/package_widget.dart';
 import 'bloc/home_bloc.dart';
 import 'home_controller.dart';
@@ -48,6 +47,15 @@ class HomeScreen extends BaseView<HomeController> {
                         verticalSwipeThreshold: 0.8,
                         stackClipBehaviour: Clip.none,
                         itemCount: controller.f.length,
+                        onWillMoveNext: (index, direction) {
+                          if (direction == SwipeDirection.left) {
+                            print('Swiped Left');
+                          } else if (direction == SwipeDirection.right) {
+                            print('Swiped Right');
+                          }
+                          return true;
+                        },
+
                         builder: (context, properties) {
                           final itemIndex = properties.index % controller.f.length;
                           return GestureDetector(
@@ -93,17 +101,7 @@ class HomeScreen extends BaseView<HomeController> {
                 ..rotateX(controller.scale.value(positioned, itemIndex)),
               alignment: Alignment.topCenter,
               child: Image.network(
-                "https://instagram.fhan4-1.fna.fbcdn.net/v/t51.29350-15/"
-                    "471632782_626329443158173_4891858443551876560_n.jpg?"
-                    "stp=dst-jpg_e35_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3"
-                    "VybGdlbi4xMDgweDE4Njguc2RyLmYyOTM1MC5kZWZhdWx0X2ltYWd"
-                    "lIn0&_nc_ht=instagram.fhan4-1.fna.fbcdn.net&_nc_cat=1&"
-                    "_nc_oc=Q6cZ2AHWjeT1-AXLJKrcWh7mzObFKkh0kU4XGX6xmv_fmSkY"
-                    "H3xxxOK8ULcilg3P8xxC9FI&_nc_ohc=Kp1-KmNd8ewQ7kNvgE38m-M"
-                    "&_nc_gid=66b326b0cd59445babd0dbcb43106f99&edm=AHedtMEBAA"
-                    "AA&ccb=7-5&ig_cache_key=MzUzMDgzNDIxMDcyMDM3MTcwNA%3D%3D"
-                    ".3-ccb7-5&oh=00_AYCL9txRgA3A0UEuMpC7RsxOwKKS36weEUX0YBTP"
-                    "GktVKQ&oe=6772FAAE&_nc_sid=a3cc6e", fit: BoxFit.cover,
+                "https://chontruong.org/wp-content/uploads/2024/09/anh-gai-xinh-3.jpg", fit: BoxFit.cover,
               ),
             ),
           ),

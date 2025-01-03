@@ -13,7 +13,7 @@ class MatchScreen extends BaseView<MatchController> {
   @override
   Widget build(BuildContext context, BaseState system, MatchController controller) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: system.colorUi.deep,
       body: WidgetBodyScroll(
         title: system.language.titleMatch,
         titleColor: system.colorUi.reverse,

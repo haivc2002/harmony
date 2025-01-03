@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:harmony/base_project/package_widget.dart';
+import 'package:harmony/view/explorer/explorer_screen.dart';
 import 'package:harmony/view/home/home_screen.dart';
-import 'package:harmony/view/match/match_screen.dart';
 import 'package:harmony/view/message/message_screen.dart';
 import 'package:harmony/view/profile/profile_screen.dart';
 import 'package:harmony/view/tab_multi/bloc/tab_multi_bloc.dart';
@@ -20,6 +20,7 @@ class TabMultiScreen extends BaseView<TabMultiController> {
     return BlocBuilder<TabMultiBloc, TabMultiState>(
       builder: (context, state) {
         return WidgetTabScreen(
+          contentOutApp: system.language.contentOutApp,
           backGround: system.colorUi.deep,
           listPage: [
             WidgetListPage(
@@ -28,9 +29,9 @@ class TabMultiScreen extends BaseView<TabMultiController> {
                 name: system.language.titleHome
             ),
             WidgetListPage(
-                page: const MatchScreen(),
+                page: const ExplorerScreen(),
                 bottomIcon: Icons.dashboard,
-                name: system.language.titleMatch
+                name: system.language.titleExplorer
             ),
             WidgetListPage(
                 page: const MessageScreen(),

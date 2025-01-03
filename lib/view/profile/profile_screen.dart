@@ -11,31 +11,98 @@ class ProfileScreen extends BaseView<ProfileController> {
 
   @override
   Widget build(BuildContext context, BaseState system, ProfileController controller) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            // Color(0xFFB2B8C4),
-            // Color(0xFFFFFFFF),
-            // Color(0xFF8296AE),
-            Color(0xFF465B72),
-            Color(0xFF17212B),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: WidgetBodyScroll(
+        title: system.language.titleProfile,
+        titleColor: system.colorUi.reverse,
+        backGroundColor: system.colorUi.deep,
+        bodyListWidget: [
+          _myAvatar(context),
+          SizedBox(height: 10.w),
+          Text("huowng phamj • 20 tuoi", style: Styles.def.setColor(MyColor.pink).bold.setTextSize(14.sp)),
+          Row(children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: MyColor.pink,
+                borderRadius: BorderRadius.circular(100.w),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 1.w),
+                child: Row(
+                  children: [
+                    Icon(Icons.location_on, color: MyColor.white, size: 17.sp),
+                    SizedBox(width: 3.w),
+                    Text("data", style: Styles.def.setColor(MyColor.white)),
+                  ],
+                ),
+              ),
+            ),
+            const Spacer()
+          ]),
+          SizedBox(height: 10.w),
+          _boxImageAndChart(context, system, controller),
+        ],
       ),
+    );
+  }
 
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: WidgetBodyScroll(
-          title: system.language.titleProfile,
-          titleColor: system.colorUi.reverse,
-          backGroundColor: system.colorUi.deep,
-          bodyListWidget: [
+  Widget _myAvatar(BuildContext context) {
+    return ShaderMask(
+      shaderCallback: (Rect bounds) {
+        return LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.black.withOpacity(0),
+            Colors.black,
+            Colors.black,
+            Colors.black.withOpacity(0),
           ],
-        ),
+          stops: const [0.0, 0.1, 0.8, 1.0],
+        ).createShader(bounds);
+      },
+      blendMode: BlendMode.dstIn,
+      child: Image.network(
+        'https://anhnail.com/wp-content/uploads/2024/10/Hinh-gai-xinh-Viet-Nam-ngau.jpg',
+        width: Common.screen(context, be: Be.width) * 0.9,
+        height: Common.screen(context, be: Be.width) * 0.9,
+        fit: BoxFit.cover,
       ),
+    );
+  }
+
+  Widget _boxImageAndChart(BuildContext context, BaseState system, ProfileController controller) {
+    return SizedBox(
+      height: Common.screen(context, be: Be.width)/2,
+      child: Row(children: [
+        WidgetImageStack(
+          color: system.colorUi.fade,
+          images: controller.list,
+        ),
+        SizedBox(width: 10.w),
+        Expanded(
+          child: Column(children: [
+            WidgetChartComplete(
+              value: 66,
+              title: 'ho so hoan thanh',
+              color: system.colorUi.fade,
+              titleColor: system.colorUi.reverse,
+            ),
+            SizedBox(height: 10.w),
+            Expanded(child: SizedBox(
+              width: double.infinity,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.w),
+                child: ColoredBox(
+                  color: system.colorUi.fade,
+                  child: Text('data'),
+                ),
+              ),
+            ))
+          ]),
+        )
+      ]),
     );
   }
 

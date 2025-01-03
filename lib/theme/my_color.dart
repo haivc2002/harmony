@@ -7,4 +7,6 @@ class MyColor {
   static const Color deepRed = Color(0xFFC8001A);
   static const Color red = Colors.red;
   static const Color grey = Color(0xFFC4C3C1);
+  static const Color yellow = Color(0xFFF9DC8A);
+  static const Color greenFade = Color(0xFFBBE2B7);
 }

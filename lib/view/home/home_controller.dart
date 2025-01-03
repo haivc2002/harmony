@@ -22,7 +22,6 @@ class HomeController extends BaseController {
     stackController
       ..removeListener(_listenController)
       ..dispose();
-
     super.onDispose();
   }
 

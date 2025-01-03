@@ -10,7 +10,12 @@ class Language {
   String titleMatch;
   String titleMessage;
   String titleProfile;
+  String titleExplorer;
   String drawerDarkMode;
+  String contentOutApp;
+  String contentItemMonopoly;
+  String contentNewsSeeMatches;
+  String contentNewStatus;
 
   Language({
     required this.hasAccount,
@@ -24,7 +29,12 @@ class Language {
     required this.titleMatch,
     required this.titleMessage,
     required this.titleProfile,
-    required this.drawerDarkMode
+    required this.drawerDarkMode,
+    required this.titleExplorer,
+    required this.contentOutApp,
+    required this.contentItemMonopoly,
+    required this.contentNewsSeeMatches,
+    required this.contentNewStatus
   });
 
   factory Language.fromMap(Map<String, String> map) {
@@ -41,6 +51,11 @@ class Language {
         titleMessage: map['titleMessage'] ?? '',
         titleProfile: map['titleProfile'] ?? '',
         drawerDarkMode: map['drawerDarkMode'] ?? '',
+        titleExplorer: map['titleExplorer'] ?? '',
+        contentOutApp: map['contentOutApp'] ?? '',
+        contentItemMonopoly: map['contentItemMonopoly'] ?? '',
+        contentNewsSeeMatches: map['contentNewsSeeMatches'] ?? '',
+        contentNewStatus: map['contentNewStatus'] ?? '',
     );
   }
 
@@ -57,7 +72,12 @@ class Language {
       'titleMatch': titleMatch,
       'titleMessage': titleMessage,
       'titleProfile': titleProfile,
-      'drawerDarkMode': drawerDarkMode
+      'drawerDarkMode': drawerDarkMode,
+      'titleExplorer': titleExplorer,
+      'contentOutApp': contentOutApp,
+      'contentItemMonopoly': contentItemMonopoly,
+      'contentNewsSeeMatches': contentNewsSeeMatches,
+      'contentNewStatus': contentNewStatus,
     };
   }
 }

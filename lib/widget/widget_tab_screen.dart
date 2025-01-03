@@ -3,15 +3,18 @@ import 'dart:ui';
 
 import '../base_project/package_widget.dart';
 
+// TODO: SCREEN
 class WidgetTabScreen extends StatefulWidget {
   final List<WidgetListPage> listPage;
   final WidgetDrawer drawer;
   final Color backGround;
+  final String contentOutApp;
   const WidgetTabScreen({
     super.key,
     required this.listPage,
     required this.drawer,
     this.backGround = MyColor.white,
+    required this.contentOutApp,
   });
 
   @override
@@ -54,22 +57,35 @@ class WidgetTabScreenState extends State<WidgetTabScreen> with SingleTickerProvi
   Widget build(BuildContext context) {
     return BlocBuilder<WidgetBloc, _WidgetState>(
       builder: (context, state) {
-        return TweenAnimationBuilder(
-          duration: const Duration(milliseconds: 300),
-          tween: ColorTween(end: widget.backGround, begin: widget.backGround),
-          builder: (context, value, child) {
-            return Scaffold(
-              backgroundColor: value,
-              body: Stack(
-                children: [
-                  _screen(state),
-                  _touchingCloseDrawer(state),
-                  _drawer(state),
-                  if(state.scaleValue != 0) _touchingArea(),
-                ],
-              ),
-            );
-          }
+        return PopScope(
+          canPop: state.isCanPop,
+          onPopInvokedWithResult: (didPop, result) {
+            if(!state.isCanPop) {
+              if(state.currentIndex != 0) {
+                context.read<WidgetBloc>().add(_WidgetEvent(currentIndex: 0));
+                _controller.navigationHandling(0, state);
+              } else {
+                _controller._showContent(widget.contentOutApp);
+              }
+            }
+          },
+          child: TweenAnimationBuilder(
+            duration: const Duration(milliseconds: 300),
+            tween: ColorTween(end: widget.backGround, begin: widget.backGround),
+            builder: (context, value, child) {
+              return Scaffold(
+                backgroundColor: value,
+                body: Stack(
+                  children: [
+                    _screen(state),
+                    _touchingCloseDrawer(state),
+                    _drawer(state),
+                    if(state.scaleValue != 0) _touchingArea(),
+                  ],
+                ),
+              );
+            }
+          ),
         );
       }
     );
@@ -178,6 +194,7 @@ class WidgetTabScreenState extends State<WidgetTabScreen> with SingleTickerProvi
   }
 }
 
+// TODO: CONTROLLER
 class _WidgetTabController {
   BuildContext context;
   List<WidgetListPage> listPage;
@@ -185,6 +202,7 @@ class _WidgetTabController {
   _WidgetTabController(this.context, this.listPage, this.pageController);
 
   final int _durationDefault = 300;
+  bool _justBack = false;
 
   void navigationHandling(int index, _WidgetState state) {
     if (!state.canAct || index == state.currentIndex) return;
@@ -202,9 +220,11 @@ class _WidgetTabController {
     Node<Widget> newNode = Node(screen);
     newNode.next = state.head;
     context.read<WidgetBloc>().add(_WidgetEvent(head: newNode));
+    int duration = _justBack ? _durationDefault : _durationDefault * 2;
+    _justBack = true;
     if (pageController.hasClients) {
       await pageController.previousPage(
-        duration: Duration(milliseconds: _durationDefault * 2),
+        duration: Duration(milliseconds: duration),
         curve: Curves.fastOutSlowIn,
       );
       Future.delayed(const Duration(milliseconds: 300), ()=> _removeLast());
@@ -213,6 +233,7 @@ class _WidgetTabController {
 
   Future<void> _addLast(Widget data, _WidgetState state) async {
     Node<Widget> newNode = Node(data);
+    _justBack = false;
     if (state.head == null) {
       context.read<WidgetBloc>().add(_WidgetEvent(head: newNode));
     } else {
@@ -228,7 +249,7 @@ class _WidgetTabController {
         duration: Duration(milliseconds: _durationDefault),
         curve: Curves.ease,
       ).whenComplete(() async {
-        await Future.delayed(const Duration(milliseconds: 1));
+        await Future.delayed(const Duration(milliseconds: 0));
         _removeFirst(state);
       });
     }
@@ -264,8 +285,29 @@ class _WidgetTabController {
     }
     return result;
   }
+
+  void _showContent(String title) {
+    OverlayEntry? overlayEntry;
+    final overlayContext = Overlay.of(context);
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => Center(
+        child: Material(
+          color: Colors.transparent,
+          child: _OverlayContentWidget(
+            onClose: () => overlayEntry?.remove(),
+            resetCanPop: ()=> context.read<WidgetBloc>().add(_WidgetEvent(isCanPop: false)),
+            contentOutApp: title,
+          ),
+        ),
+      ),
+    );
+    context.read<WidgetBloc>().add(_WidgetEvent(isCanPop: true));
+    overlayContext.insert(overlayEntry);
+  }
 }
 
+// TODO: MENU
 class _WidgetTabMenu extends StatelessWidget {
   final _WidgetState state;
   final _WidgetTabController controller;
@@ -346,6 +388,7 @@ class _WidgetTabMenu extends StatelessWidget {
   }
 }
 
+// TODO: NODE LINK LIST
 class Node<Widget> {
   Widget data;
   Node<Widget>? next;
@@ -353,17 +396,20 @@ class Node<Widget> {
   Node(this.data);
 }
 
+// TODO: BLOC STATE MANAGER
 class _WidgetState {
   Node<Widget>? head;
   bool canAct;
   int currentIndex;
   double scaleValue;
+  bool isCanPop;
 
   _WidgetState({
     this.head,
     this.canAct = true,
     this.currentIndex = 0,
     this.scaleValue = 0,
+    this.isCanPop = false,
   });
 }
 
@@ -372,8 +418,9 @@ class _WidgetEvent {
   bool? canAct;
   int? currentIndex;
   double? scaleValue;
+  bool? isCanPop;
 
-  _WidgetEvent({this.head, this.canAct, this.currentIndex, this.scaleValue});
+  _WidgetEvent({this.head, this.canAct, this.currentIndex, this.scaleValue, this.isCanPop});
 }
 
 class WidgetBloc extends Bloc<_WidgetEvent, _WidgetState> {
@@ -384,11 +431,13 @@ class WidgetBloc extends Bloc<_WidgetEvent, _WidgetState> {
           canAct: event.canAct ?? state.canAct,
           currentIndex: event.currentIndex ?? state.currentIndex,
           scaleValue: event.scaleValue ?? state.scaleValue,
+          isCanPop: event.isCanPop ?? state.isCanPop
       ));
     });
   }
 }
 
+// TODO: MODEL PAGE PARAMS
 class WidgetListPage {
   Widget page;
   IconData bottomIcon;
@@ -397,6 +446,7 @@ class WidgetListPage {
   WidgetListPage({required this.page, required this.bottomIcon, required this.name});
 }
 
+// TODO: MODEL DRAWER
 class WidgetDrawer {
   Widget header;
   Color? colorHeader, backGroundColor;
@@ -409,3 +459,61 @@ class WidgetDrawer {
 
   WidgetDrawer({required this.children, required this.header, this.width = 250, this.colorHeader, this.backGroundColor});
 }
+
+// TODO: MANAGER ON BACK APP
+class _OverlayContentWidget extends StatefulWidget {
+  final VoidCallback onClose;
+  final VoidCallback resetCanPop;
+  final String contentOutApp;
+
+  const _OverlayContentWidget({
+    required this.onClose,
+    required this.resetCanPop,
+    required this.contentOutApp,
+  });
+
+  @override
+  State<_OverlayContentWidget> createState() => _OverlayContentWidgetState();
+}
+
+class _OverlayContentWidgetState extends State<_OverlayContentWidget> {
+  double opacity = 1.0;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) setState(() => opacity = 0.0);
+
+      Future.delayed(const Duration(milliseconds: 500), () {
+        widget.onClose();
+        widget.resetCanPop();
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      opacity: opacity,
+      duration: const Duration(milliseconds: 500),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.all(10.0),
+        constraints: const BoxConstraints(
+          maxWidth: 200,
+        ),
+        child: Text(
+          widget.contentOutApp,
+          style: Styles.def.setColor(MyColor.white).setTextSize(13).bold,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
+

@@ -12,6 +12,11 @@ class En {
     'titleMatch': 'Match',
     'titleMessage': 'Message',
     'titleProfile': 'Profile',
-    'drawerDarkMode': 'Use a dark theme'
+    'drawerDarkMode': 'Use a dark theme',
+    'titleExplorer': 'Explorer',
+    'contentOutApp': 'Do it again and exit',
+    'contentItemMonopoly': 'Someone already likes you',
+    'contentNewsSeeMatches': 'What to see from someone who matches you?',
+    'contentNewStatus': 'New status'
   };
 }
