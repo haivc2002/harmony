@@ -9,73 +9,71 @@ class HomeScreen extends BaseView<HomeController> {
   const HomeScreen({super.key});
 
   @override
-  HomeController controller(BuildContext context) => HomeController(context);
+  HomeController createController(BuildContext context) => HomeController(context);
 
   @override
-  Widget build(BuildContext context, BaseState system, HomeController controller) {
+  Widget build() {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: TweenAnimationBuilder(
         duration: const Duration(milliseconds: 300),
-        tween: ColorTween(begin: system.colorUi.deep, end: system.colorUi.deep),
+        tween: ColorTween(begin: os.colorUi.deep, end: os.colorUi.deep),
         builder: (context, value, child) {
           return WidgetBodyScroll(
-            title: system.language.titleHome,
+            title: os.language.titleHome,
             backGroundColor: value,
-            titleColor: system.colorUi.reverse,
+            titleColor: os.colorUi.reverse,
+            showIconLeading: false,
             scrollPhysics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
             leadingIcon: IconButton(
               onPressed: ()=> WidgetDrawer.open(context),
-              icon: Icon(Icons.menu, color: system.colorUi.reverse)
+              icon: Icon(Icons.menu, color: os.colorUi.reverse)
             ),
-            bodyListWidget: [
+            buildType: BuildTypeData.base(children: [
               BlocBuilder<HomeBloc, HomeState>(
-                builder: (context, state) {
-                  return SizedBox(
-                    width: double.infinity,
-                    height: Common.screen(context, be: Be.height) - controller.heightAppbar,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.w),
-                      child: SwipableStack(
-                        detectableSwipeDirections: const {
-                          SwipeDirection.right,
-                          SwipeDirection.left,
-                        },
-                        controller: controller.stackController,
-                        horizontalSwipeThreshold: 0.8,
-                        verticalSwipeThreshold: 0.8,
-                        stackClipBehaviour: Clip.none,
-                        itemCount: controller.f.length,
-                        onWillMoveNext: (index, direction) {
-                          if (direction == SwipeDirection.left) {
-                            print('Swiped Left');
-                          } else if (direction == SwipeDirection.right) {
-                            print('Swiped Right');
-                          }
-                          return true;
-                        },
+                  builder: (context, state) {
+                    return SizedBox(
+                      width: double.infinity,
+                      height: Common.screen(context, be: Be.height) - controller.heightAppbar,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.w),
+                        child: SwipableStack(
+                          detectableSwipeDirections: const {
+                            SwipeDirection.right,
+                            SwipeDirection.left,
+                          },
+                          controller: controller.stackController,
+                          horizontalSwipeThreshold: 0.8,
+                          verticalSwipeThreshold: 0.8,
+                          stackClipBehaviour: Clip.none,
+                          itemCount: controller.f.length,
+                          onWillMoveNext: (index, direction) {
+                            if (direction == SwipeDirection.left) {
+                              print('Swiped Left');
+                            } else if (direction == SwipeDirection.right) {
+                              print('Swiped Right');
+                            }
+                            return true;
+                          },
 
-                        builder: (context, properties) {
-                          final itemIndex = properties.index % controller.f.length;
-                          return GestureDetector(
-                            onTap: ()=> print(itemIndex),
-                            child: _itemCard(
-                                context: context,
-                                system: system,
-                                controller: controller,
-                                positioned: properties.swipeProgress,
-                                itemIndex: itemIndex,
-                                state: state
-                            )
-                          );
-                        },
+                          builder: (context, properties) {
+                            final itemIndex = properties.index % controller.f.length;
+                            return GestureDetector(
+                                onTap: ()=> print(itemIndex),
+                                child: _itemCard(
+                                    positioned: properties.swipeProgress,
+                                    itemIndex: itemIndex,
+                                    state: state
+                                )
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  );
-                }
+                    );
+                  }
               )
-            ]
+            ])
           );
         }
       ),
@@ -83,9 +81,6 @@ class HomeScreen extends BaseView<HomeController> {
   }
 
   Widget _itemCard({
-    required BuildContext context,
-    required BaseState system,
-    required HomeController controller,
     required double positioned,
     required HomeState state,
     required int itemIndex

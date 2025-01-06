@@ -39,3 +39,4 @@ export 'package:harmony/widget/widget_badges.dart';
 export 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 export 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 export 'package:harmony/widget/widget_sparkling.dart';
+export 'package:flutter_blurhash/flutter_blurhash.dart';

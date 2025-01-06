@@ -13,40 +13,40 @@ class TabMultiScreen extends BaseView<TabMultiController> {
   const TabMultiScreen({super.key});
 
   @override
-  TabMultiController controller(BuildContext context) => TabMultiController(context);
+  TabMultiController createController(BuildContext context) => TabMultiController(context);
 
   @override
-  Widget build(BuildContext context, BaseState system, TabMultiController controller) {
+  Widget build() {
     return BlocBuilder<TabMultiBloc, TabMultiState>(
       builder: (context, state) {
         return WidgetTabScreen(
-          contentOutApp: system.language.contentOutApp,
-          backGround: system.colorUi.deep,
+          contentOutApp: os.language.contentOutApp,
+          backGround: os.colorUi.deep,
           listPage: [
             WidgetListPage(
                 page: const HomeScreen(),
                 bottomIcon: Icons.favorite,
-                name: system.language.titleHome
+                name: os.language.titleHome
             ),
             WidgetListPage(
                 page: const ExplorerScreen(),
                 bottomIcon: Icons.dashboard,
-                name: system.language.titleExplorer
+                name: os.language.titleExplorer
             ),
             WidgetListPage(
                 page: const MessageScreen(),
                 bottomIcon: CupertinoIcons.chat_bubble_fill,
-                name: system.language.titleMessage
+                name: os.language.titleMessage
             ),
             WidgetListPage(
                 page: const ProfileScreen(),
                 bottomIcon: Icons.person,
-                name: system.language.titleProfile
+                name: os.language.titleProfile
             ),
           ],
           drawer: WidgetDrawer(
               header: Container(),
-              backGroundColor: system.colorUi.drawer,
+              backGroundColor: os.colorUi.drawer,
               children: [
                 IconButton(
                     onPressed: ()=> controller.onChangeLanguage(En.language),
@@ -58,8 +58,8 @@ class TabMultiScreen extends BaseView<TabMultiController> {
                 ),
                 SwitchListTile(
                     value: state.isDark,
-                    title: AutoSizeText(system.language.drawerDarkMode, style: Styles.def
-                        .setColor(system.colorUi.reverse)
+                    title: AutoSizeText(os.language.drawerDarkMode, style: Styles.def
+                        .setColor(os.colorUi.reverse)
                     ),
                     activeColor: MyColor.white,
                     activeTrackColor: MyColor.pink,

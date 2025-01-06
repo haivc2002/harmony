@@ -24,16 +24,12 @@ class WidgetTabScreen extends StatefulWidget {
 class WidgetTabScreenState extends State<WidgetTabScreen> with SingleTickerProviderStateMixin {
 
   late _WidgetTabController _controller;
-  late PageController _pageController;
   late AnimationController animationController;
   late Animation<double> _animation;
 
   @override
   void initState() {
-    _pageController = PageController();
-    final state = context.read<WidgetBloc>().state;
-    _controller = _WidgetTabController(context, widget.listPage, _pageController);
-    if (widget.listPage.isNotEmpty) _controller._addFirst(widget.listPage[0].page, state);
+    _controller = _WidgetTabController(context, widget.listPage);
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
@@ -99,11 +95,25 @@ class WidgetTabScreenState extends State<WidgetTabScreen> with SingleTickerProvi
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
-            PageView.builder(
-              controller: _controller.pageController,
-              itemCount: _controller.getList(state).length,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) => _controller.getList(state)[index],
+            IndexedStack(
+              index: state.currentIndex,
+              children: List.generate(widget.listPage.length, (index) {
+                final isVisible = index == state.currentIndex;
+                return TweenAnimationBuilder(
+                  duration: const Duration(milliseconds: 300),
+                  tween: Tween<double>(begin: 100, end: _controller.valueSlate(isVisible, index, state)),
+                  curve: Curves.ease,
+                  builder: (context, value, child) {
+                    return Transform.translate(
+                      offset: Offset(value, 0),
+                      child: Opacity(
+                        opacity: 1 - (value.abs()/100),
+                        child: widget.listPage[index].page
+                      ),
+                    );
+                  }
+                );
+              }),
             ),
             Positioned(
               bottom: 20.w,
@@ -198,92 +208,25 @@ class WidgetTabScreenState extends State<WidgetTabScreen> with SingleTickerProvi
 class _WidgetTabController {
   BuildContext context;
   List<WidgetListPage> listPage;
-  PageController pageController;
-  _WidgetTabController(this.context, this.listPage, this.pageController);
-
-  final int _durationDefault = 300;
-  bool _justBack = false;
+  _WidgetTabController(this.context, this.listPage);
 
   void navigationHandling(int index, _WidgetState state) {
-    if (!state.canAct || index == state.currentIndex) return;
     bool canAct = false;
-    if (index < state.currentIndex) {
-      pageController.jumpToPage(1);
-      _addFirst(listPage[index].page, state);
-    } else if (index > state.currentIndex) {
-      _addLast(listPage[index].page, state);
-    }
     context.read<WidgetBloc>().add(_WidgetEvent(currentIndex: index, canAct: canAct));
   }
 
-  Future<void> _addFirst(Widget screen, _WidgetState state) async {
-    Node<Widget> newNode = Node(screen);
-    newNode.next = state.head;
-    context.read<WidgetBloc>().add(_WidgetEvent(head: newNode));
-    int duration = _justBack ? _durationDefault : _durationDefault * 2;
-    _justBack = true;
-    if (pageController.hasClients) {
-      await pageController.previousPage(
-        duration: Duration(milliseconds: duration),
-        curve: Curves.fastOutSlowIn,
-      );
-      Future.delayed(const Duration(milliseconds: 300), ()=> _removeLast());
-    }
-  }
-
-  Future<void> _addLast(Widget data, _WidgetState state) async {
-    Node<Widget> newNode = Node(data);
-    _justBack = false;
-    if (state.head == null) {
-      context.read<WidgetBloc>().add(_WidgetEvent(head: newNode));
-    } else {
-      Node<Widget>? current = state.head;
-      while (current!.next != null) {
-        current = current.next;
+  double valueSlate(bool isVisible, int index, _WidgetState state) {
+    if(!isVisible) {
+      if (index < state.currentIndex) {
+        return -100;
+      } else if (index > state.currentIndex) {
+        return 100;
+      } else {
+        return 0;
       }
-      current.next = newNode;
-      context.read<WidgetBloc>().add(_WidgetEvent(head: state.head));
-    }
-    if (pageController.hasClients) {
-      pageController.nextPage(
-        duration: Duration(milliseconds: _durationDefault),
-        curve: Curves.ease,
-      ).whenComplete(() async {
-        await Future.delayed(const Duration(milliseconds: 0));
-        _removeFirst(state);
-      });
-    }
-  }
-
-  void _removeFirst(_WidgetState state) {
-    if (state.head != null) {
-      context.read<WidgetBloc>().add(_WidgetEvent(head: state.head!.next, canAct: true));
-    }
-  }
-
-  void _removeLast() {
-    final state = context.read<WidgetBloc>().state;
-    if (state.head == null) return;
-    if (state.head!.next == null) {
-      context.read<WidgetBloc>().add(_WidgetEvent(head: null, canAct: true));
     } else {
-      Node<Widget>? current = state.head;
-      while (current!.next!.next != null) {
-        current = current.next;
-      }
-      current.next = null;
-      context.read<WidgetBloc>().add(_WidgetEvent(head: state.head, canAct: true));
+      return 0;
     }
-  }
-
-  List<Widget> getList(_WidgetState state) {
-    List<Widget> result = [];
-    Node<Widget>? current = state.head;
-    while (current != null) {
-      result.add(current.data);
-      current = current.next;
-    }
-    return result;
   }
 
   void _showContent(String title) {
@@ -388,24 +331,14 @@ class _WidgetTabMenu extends StatelessWidget {
   }
 }
 
-// TODO: NODE LINK LIST
-class Node<Widget> {
-  Widget data;
-  Node<Widget>? next;
-
-  Node(this.data);
-}
-
 // TODO: BLOC STATE MANAGER
 class _WidgetState {
-  Node<Widget>? head;
   bool canAct;
   int currentIndex;
   double scaleValue;
   bool isCanPop;
 
   _WidgetState({
-    this.head,
     this.canAct = true,
     this.currentIndex = 0,
     this.scaleValue = 0,
@@ -414,24 +347,22 @@ class _WidgetState {
 }
 
 class _WidgetEvent {
-  Node<Widget>? head;
   bool? canAct;
   int? currentIndex;
   double? scaleValue;
   bool? isCanPop;
 
-  _WidgetEvent({this.head, this.canAct, this.currentIndex, this.scaleValue, this.isCanPop});
+  _WidgetEvent({this.canAct, this.currentIndex, this.scaleValue, this.isCanPop});
 }
 
 class WidgetBloc extends Bloc<_WidgetEvent, _WidgetState> {
   WidgetBloc() : super(_WidgetState()) {
     on<_WidgetEvent>((event, emit) {
       emit(_WidgetState(
-          head: event.head ?? state.head,
           canAct: event.canAct ?? state.canAct,
           currentIndex: event.currentIndex ?? state.currentIndex,
           scaleValue: event.scaleValue ?? state.scaleValue,
-          isCanPop: event.isCanPop ?? state.isCanPop
+          isCanPop: event.isCanPop ?? state.isCanPop,
       ));
     });
   }

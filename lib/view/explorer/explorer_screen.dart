@@ -8,17 +8,18 @@ class ExplorerScreen extends BaseView<ExplorerController> {
   const ExplorerScreen({super.key});
 
   @override
-  ExplorerController controller(BuildContext context) => ExplorerController(context);
+  ExplorerController createController(BuildContext context) => ExplorerController(context);
 
   @override
-  Widget build(BuildContext context, BaseState system, ExplorerController controller) {
+  Widget build() {
     return Scaffold(
-      backgroundColor: system.colorUi.deep,
+      backgroundColor: os.colorUi.deep,
       body: WidgetBodyScroll(
-        titleColor: system.colorUi.reverse,
-        backGroundColor: system.colorUi.deep,
-        title: system.language.titleExplorer,
-        bodyListWidget: [
+        titleColor: os.colorUi.reverse,
+        backGroundColor: os.colorUi.deep,
+        title: os.language.titleExplorer,
+        showIconLeading: false,
+        buildType: BuildTypeData.base(children: [
           Row(children: [
             Expanded(child: GestureDetector(
               onTap: ()=> Navigator.pushNamed(context, MatchScreen.router),
@@ -48,8 +49,8 @@ class ExplorerScreen extends BaseView<ExplorerController> {
                       )),
                       const Spacer(),
                       Expanded(
-                        flex: 4,
-                        child: Text(system.language.titleMatch, style: Styles.def.bold.setTextSize(20.sp).setColor(MyColor.white))
+                          flex: 4,
+                          child: Text(os.language.titleMatch, style: Styles.def.bold.setTextSize(20.sp).setColor(MyColor.white))
                       )
                     ],
                   ),
@@ -74,10 +75,10 @@ class ExplorerScreen extends BaseView<ExplorerController> {
                     children: [
                       DecoratedBox(
                         decoration: BoxDecoration(
-                          color: MyColor.black,
-                          border: Border.all(),
-                          shape: BoxShape.circle,
-                          boxShadow: const [BoxShadow(color: MyColor.white, blurRadius: 10, spreadRadius: 8)]
+                            color: MyColor.black,
+                            border: Border.all(),
+                            shape: BoxShape.circle,
+                            boxShadow: const [BoxShadow(color: MyColor.white, blurRadius: 10, spreadRadius: 8)]
                         ),
                         child: Padding(
                           padding: EdgeInsets.all(5.w),
@@ -88,7 +89,7 @@ class ExplorerScreen extends BaseView<ExplorerController> {
                       Expanded(
                         flex: 4,
                         child: Text(
-                          system.language.contentItemMonopoly,
+                          os.language.contentItemMonopoly,
                           style: Styles.def.bold.setTextSize(20.sp),
                         ),
                       )
@@ -104,63 +105,61 @@ class ExplorerScreen extends BaseView<ExplorerController> {
             padding: EdgeInsets.all(10.w),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.w),
-              color: system.colorUi.fade,
+              color: os.colorUi.fade,
               border: Border.all(color: MyColor.grey.withOpacity(0.2), width: 2.w),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(system.language.contentNewsSeeMatches,
+                Text(os.language.contentNewsSeeMatches,
                     style: Styles.def
-                        .setColor(system.colorUi.reverse)
+                        .setColor(os.colorUi.reverse)
                         .italic.setTextSize(10.sp)
                 ),
                 Expanded(child: Row(children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(child: Row(
-                          children: [
-                            Text(system.language.contentNewStatus, style: Styles.def.setColor(system.colorUi.reverse)),
-                            SizedBox(width: 10.w),
-                            DecoratedBox(
-                              decoration: BoxDecoration(
-                                  color: MyColor.white,
-                                  borderRadius: BorderRadius.circular(100.w)
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(5.w, 3.w, 10.w, 3.w),
-                                child: Row(
-                                    children: [
-                                      const Icon(Icons.add, color: MyColor.greenFade),
-                                      Text("98", style: Styles.def.bold)
-                                    ]
-                                ),
-                              ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: Row(
+                        children: [
+                          Text(os.language.contentNewStatus, style: Styles.def.setColor(os.colorUi.reverse)),
+                          SizedBox(width: 10.w),
+                          DecoratedBox(
+                            decoration: BoxDecoration(
+                                color: MyColor.white,
+                                borderRadius: BorderRadius.circular(100.w)
                             ),
-                          ],
-                        )),
-                        Row(children: [
-                          _iconNews(MyImage.doubleFavourite, system),
-                          _iconNews(MyImage.iconLetter, system),
-                          _iconNews(MyImage.doubleGlass, system),
-                          _iconNews(MyImage.doubleIconImage, system),
-                        ]),
-                        SizedBox(height: 10.w),
-                      ],
-                    ),
-                    const Spacer(),
-                    Image.asset(MyImage.nonsenseChart, color: system.colorUi.reverse, fit: BoxFit.cover)
-                  ]))
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(5.w, 3.w, 10.w, 3.w),
+                              child: Row(children: [
+                                const Icon(Icons.add, color: MyColor.greenFade),
+                                Text("98", style: Styles.def.bold)
+                              ]),
+                            ),
+                          ),
+                        ],
+                      )),
+                      Row(children: [
+                        _iconNews(MyImage.doubleFavourite),
+                        _iconNews(MyImage.iconLetter),
+                        _iconNews(MyImage.doubleGlass),
+                        _iconNews(MyImage.doubleIconImage),
+                      ]),
+                      SizedBox(height: 10.w),
+                    ],
+                  ),
+                  const Spacer(),
+                  Image.asset(MyImage.nonsenseChart, color: os.colorUi.reverse, fit: BoxFit.cover)
+                ]))
               ],
             ),
           )
-        ],
+        ]),
       ),
     );
   }
 
-  Widget _iconNews(String icon, BaseState os) {
+  Widget _iconNews(String icon) {
     return Align(
       widthFactor: 0.8,
       child: SizedBox(

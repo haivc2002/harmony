@@ -11,10 +11,10 @@ class LoginScreen extends BaseView<LoginController> {
   const LoginScreen({super.key});
 
   @override
-  LoginController controller(BuildContext context) => LoginController(context);
+  LoginController createController(BuildContext context) => LoginController(context);
 
   @override
-  Widget build(context, system, controller) {
+  Widget build() {
     return SplashAnimation(
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
@@ -57,15 +57,15 @@ class LoginScreen extends BaseView<LoginController> {
                               color: MyColor.white,
                               radius: 100,
                               padding: EdgeInsets.symmetric(vertical: 12.w),
-                              textButton: system.language.hasAccount,
-                              onTap: () => controller.openLogin.perform(_bodyLogin(context, system, controller))
+                              textButton: os.language.hasAccount,
+                              onTap: () => controller.openLogin.perform(_bodyLogin())
                           ),
                           SizedBox(height: 20.w),
                           WidgetButton(
                               styleText: Styles.def.setColor(MyColor.white).bold,
                               color: MyColor.pink,
                               radius: 100,
-                              textButton: system.language.notAccount,
+                              textButton: os.language.notAccount,
                               onTap: () => controller.onChangeLanguage(Vi.language)
                           ),
                         ],
@@ -81,7 +81,7 @@ class LoginScreen extends BaseView<LoginController> {
     );
   }
 
-  Widget _bodyLogin(BuildContext context, BaseState system, LoginController controller) {
+  Widget _bodyLogin() {
     return Dialog(
       backgroundColor: Colors.transparent,
       shadowColor: Colors.transparent,
@@ -103,7 +103,7 @@ class LoginScreen extends BaseView<LoginController> {
                       children: [
                         Row(children: [
                           Text(
-                            system.language.titleLogin,
+                            os.language.titleLogin,
                             style: Styles.def.setColor(MyColor.white).bold.setTextSize(30.sp),
                           ),
                           SizedBox(width: 10.w),
@@ -123,7 +123,7 @@ class LoginScreen extends BaseView<LoginController> {
                           controller: controller.onLogin.passController,
                           hidePass: !state.isShowPass,
                           colorInput: MyColor.black.withOpacity(0.3),
-                          labelText: system.language.password,
+                          labelText: os.language.password,
                           colorText: MyColor.white,
                           keyboardType: TextInputType.visiblePassword,
                           validate: state.validatePassword,
@@ -134,16 +134,16 @@ class LoginScreen extends BaseView<LoginController> {
                         ),
                         SizedBox(height: 20.w),
                         WidgetButton(
-                          textButton: system.language.titleLogin,
+                          textButton: os.language.titleLogin,
                           radius: 10.w,
                           color: MyColor.pink.withOpacity(0.6),
                           styleText: Styles.def.setTextSize(15.sp).bold.setColor(MyColor.white),
-                          onTap: ()=> controller.onLogin.perform(state, system)
+                          onTap: ()=> controller.onLogin.perform(state, os)
                         ),
                         SizedBox(height: 20.w),
                         Row(children: [
                           Expanded(child: Divider(endIndent: 20.w, color: MyColor.white.withOpacity(0.5))),
-                          Text(system.language.or, style: Styles.def.whiteText),
+                          Text(os.language.or, style: Styles.def.whiteText),
                           Expanded(child: Divider(indent: 20.w, color: MyColor.white.withOpacity(0.5))),
                         ]),
                         GestureDetector(

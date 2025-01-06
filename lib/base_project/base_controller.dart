@@ -12,9 +12,9 @@ class BaseController {
     onInitState();
   }
 
-  T? onCreateArgument<T>() {
+  M? onCreateArgument<M>() {
     final args = ModalRoute.of(context)?.settings.arguments;
-    if (args is T) return args;
+    if (args is M) return args;
     return null;
   }
 

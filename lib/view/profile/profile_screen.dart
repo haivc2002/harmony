@@ -7,18 +7,19 @@ class ProfileScreen extends BaseView<ProfileController> {
   const ProfileScreen({super.key});
 
   @override
-  ProfileController controller(BuildContext context) => ProfileController(context);
+  ProfileController createController(BuildContext context) => ProfileController(context);
 
   @override
-  Widget build(BuildContext context, BaseState system, ProfileController controller) {
+  Widget build() {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: WidgetBodyScroll(
-        title: system.language.titleProfile,
-        titleColor: system.colorUi.reverse,
-        backGroundColor: system.colorUi.deep,
-        bodyListWidget: [
-          _myAvatar(context),
+        title: os.language.titleProfile,
+        titleColor: os.colorUi.reverse,
+        backGroundColor: os.colorUi.deep,
+        showIconLeading: false,
+        buildType: BuildTypeData.base(children: [
+          _myAvatar(),
           SizedBox(height: 10.w),
           Text("huowng phamj • 20 tuoi", style: Styles.def.setColor(MyColor.pink).bold.setTextSize(14.sp)),
           Row(children: [
@@ -41,13 +42,13 @@ class ProfileScreen extends BaseView<ProfileController> {
             const Spacer()
           ]),
           SizedBox(height: 10.w),
-          _boxImageAndChart(context, system, controller),
-        ],
+          _boxImageAndChart(),
+        ])
       ),
     );
   }
 
-  Widget _myAvatar(BuildContext context) {
+  Widget _myAvatar() {
     return ShaderMask(
       shaderCallback: (Rect bounds) {
         return LinearGradient(
@@ -72,12 +73,12 @@ class ProfileScreen extends BaseView<ProfileController> {
     );
   }
 
-  Widget _boxImageAndChart(BuildContext context, BaseState system, ProfileController controller) {
+  Widget _boxImageAndChart() {
     return SizedBox(
       height: Common.screen(context, be: Be.width)/2,
       child: Row(children: [
         WidgetImageStack(
-          color: system.colorUi.fade,
+          color: os.colorUi.fade,
           images: controller.list,
         ),
         SizedBox(width: 10.w),
@@ -86,8 +87,8 @@ class ProfileScreen extends BaseView<ProfileController> {
             WidgetChartComplete(
               value: 66,
               title: 'ho so hoan thanh',
-              color: system.colorUi.fade,
-              titleColor: system.colorUi.reverse,
+              color: os.colorUi.fade,
+              titleColor: os.colorUi.reverse,
             ),
             SizedBox(height: 10.w),
             Expanded(child: SizedBox(
@@ -95,7 +96,7 @@ class ProfileScreen extends BaseView<ProfileController> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.w),
                 child: ColoredBox(
-                  color: system.colorUi.fade,
+                  color: os.colorUi.fade,
                   child: Text('data'),
                 ),
               ),

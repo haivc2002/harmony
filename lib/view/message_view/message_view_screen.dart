@@ -10,12 +10,12 @@ class MessageViewScreen extends BaseView<MessageViewController> {
   const MessageViewScreen({super.key});
 
   @override
-  MessageViewController controller(BuildContext context) => MessageViewController(context);
+  MessageViewController createController(BuildContext context) => MessageViewController(context);
 
   @override
-  Widget build(BuildContext context, BaseState system, MessageViewController controller) {
+  Widget build() {
     return Scaffold(
-      backgroundColor: system.colorUi.deep,
+      backgroundColor: os.colorUi.deep,
       body: Stack(
         children: [
           ListView.builder(
