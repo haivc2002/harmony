@@ -1,16 +1,12 @@
 import 'package:harmony/base_project/language.dart';
 import 'package:harmony/base_project/package_widget.dart';
+import 'base_common.dart';
 
-class BaseController {
+class BaseController with BaseCommon {
   BuildContext context;
   BaseController(this.context);
 
   final args = null;
-
-  void create(BuildContext context) {
-    this.context = context;
-    onInitState();
-  }
 
   M? onCreateArgument<M>() {
     final args = ModalRoute.of(context)?.settings.arguments;
@@ -23,40 +19,35 @@ class BaseController {
   void onDispose() {}
 
   void onChangeLanguage(Map<String, String> langMap) async {
-    Common.onLoading(context);
+    Utilities.onLoading(context);
     await Future.delayed(const Duration(milliseconds: 500));
     if(context.mounted) {
       final language = Language.fromMap(langMap);
       if(context.mounted) context.read<BaseBloc>().add(BaseEvent(language: language));
-      Global.setString(Constant.languageStore, Constant.languageSetStore(kLanguage: langMap));
-      Common.onHideLoad(context);
+      Global.setString(Constant.languageStore, langUi.keyEncode(kLanguage: langMap));
+      Utilities.onHideLoad(context);
     }
   }
 
   void onChangeColorUi({required Map<String, Color> themeUi}) {
     final color = ModelThemeUi.fromMap(themeUi);
     context.read<BaseBloc>().add(BaseEvent(colorUi: color));
-    Global.setString(Constant.colorGetStore, Constant.colorSetStore(themeUi: themeUi));
+    Global.setString(Constant.colorGetStore, colorUi.keyEncode(themeUi: themeUi));
   }
 
-  void onSuccess<B>(E) {
+  void _addEventToBloc<B>(dynamic event) {
     final bloc = context.read<B>();
     if (bloc is Bloc<dynamic, dynamic>) {
-      bloc.add(E);
+      bloc.add(event);
     } else {
-      throw Exception('B must be a Bloc with an add() method.');
+      throw Exception('${B.toString()} must be a Bloc with an add() method.');
     }
   }
 
-  void onLoad<B, E>() {
-    final bloc = context.read<B>();
-    if(bloc is Bloc<dynamic, dynamic>) {
-      bloc.add(E);
-    } else {
-      throw Exception('B must be a Bloc with an add() method.');
-    }
-  }
+  void onLoad<B>(dynamic event) => _addEventToBloc<B>(event);
 
-  void onError() {}
+  void onSuccess<B>(dynamic event) => _addEventToBloc<B>(event);
+
+  void onError<B>(dynamic event) => _addEventToBloc<B>(event);
 
 }

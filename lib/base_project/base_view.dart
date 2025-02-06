@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:harmony/base_project/base_controller.dart';
@@ -14,20 +16,9 @@ abstract class BaseView<T extends BaseController> extends StatefulWidget {
 
   T createController(BuildContext context);
 
-  T get controller {
-    if (_controllers[T] == null) throw Exception('Controller not initialized');
-    return _controllers[T] as T;
-  }
-
-  BuildContext get context {
-    if (_contexts[T] == null) throw Exception('Context not initialized');
-    return _contexts[T]!;
-  }
-
-  BaseState get os {
-    if(_os[T] == null) throw Exception('os not initialized');
-    return _os[T]!;
-  }
+  T get controller => _controllers[T] as T;
+  BuildContext get context => _contexts[T]!;
+  BaseState get os => _os[T]!;
 
   @override
   State<BaseView<T>> createState() => _BaseViewState<T>();
@@ -43,7 +34,14 @@ class _BaseViewState<T extends BaseController> extends State<BaseView<T>> {
     BaseView._controllers[T] = controller;
     BaseView._contexts[T] = context;
     BaseView._os[T] = context.read<BaseBloc>().state;
-    controller.create(context);
+    _create(context);
+    log("CREATED SCREEN: ${T.toString()}");
+    log("CREATED CONTROLLER: ${T.toString()}");
+  }
+
+  void _create(BuildContext context) {
+    context = this.context;
+    controller.onInitState();
   }
 
   @override
@@ -65,15 +63,3 @@ class _BaseViewState<T extends BaseController> extends State<BaseView<T>> {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-

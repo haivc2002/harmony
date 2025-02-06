@@ -40,7 +40,7 @@ class WidgetInput extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.w),
           border: validate!.isNotEmpty 
               ? Border.all(color: MyColor.red, width: 1.5)
-              : Border.all(color: MyColor.white.withOpacity(0.4))
+              : Border.all(color: MyColor.white.opacity4)
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +61,7 @@ class WidgetInput extends StatelessWidget {
                 labelText: validate!.isNotEmpty ? validate : labelText,
                 labelStyle: validate!.isNotEmpty
                   ? const TextStyle(color: MyColor.red)
-                  : TextStyle(color: labelColor ?? MyColor.white.withOpacity(0.5)),
+                  : TextStyle(color: labelColor ?? MyColor.white.opacity5),
                 suffixIcon: suffixIcon,
                 enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),

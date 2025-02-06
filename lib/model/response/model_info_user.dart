@@ -1,27 +1,23 @@
 class ModelInfoUser {
-  String? result;
+  int? result;
   String? message;
-  dynamic idUser;
-  String? email;
+  int? idUser;
   List<ListImage>? listImage;
   Info? info;
   InfoMore? infoMore;
 
-  ModelInfoUser({
-    String? result,
-    String? message,
-    this.idUser,
-    this.email,
-    this.listImage,
-    this.info,
-    this.infoMore
-  });
+  ModelInfoUser(
+      {this.result,
+        this.message,
+        this.idUser,
+        this.listImage,
+        this.info,
+        this.infoMore});
 
   ModelInfoUser.fromJson(Map<String, dynamic> json) {
     result = json['result'];
     message = json['message'];
     idUser = json['idUser'];
-    email = json['email'];
     if (json['listImage'] != null) {
       listImage = <ListImage>[];
       json['listImage'].forEach((v) {
@@ -39,7 +35,6 @@ class ModelInfoUser {
     data['result'] = result;
     data['message'] = message;
     data['idUser'] = idUser;
-    data['email'] = email;
     if (listImage != null) {
       data['listImage'] = listImage!.map((v) => v.toJson()).toList();
     }
@@ -82,8 +77,8 @@ class Info {
   String? desiredState;
   String? word;
   String? academicLevel;
-  double? lat;
-  double? lon;
+  int? lat;
+  int? lon;
   String? describeYourself;
   String? gender;
   String? premiumState;
@@ -100,8 +95,8 @@ class Info {
         this.lon,
         this.describeYourself,
         this.gender,
-        this.deadline,
-        this.premiumState});
+        this.premiumState,
+        this.deadline});
 
   Info.fromJson(Map<String, dynamic> json) {
     idUser = json['idUser'];
@@ -176,3 +171,4 @@ class InfoMore {
     return data;
   }
 }
+

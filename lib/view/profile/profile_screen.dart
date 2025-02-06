@@ -1,7 +1,6 @@
 import 'package:harmony/base_project/package_widget.dart';
 import 'package:harmony/view/profile/profile_controller.dart';
 
-
 class ProfileScreen extends BaseView<ProfileController> {
   static const String router = '/ProfileScreen';
   const ProfileScreen({super.key});
@@ -49,33 +48,53 @@ class ProfileScreen extends BaseView<ProfileController> {
   }
 
   Widget _myAvatar() {
-    return ShaderMask(
-      shaderCallback: (Rect bounds) {
-        return LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.black.withOpacity(0),
-            Colors.black,
-            Colors.black,
-            Colors.black.withOpacity(0),
-          ],
-          stops: const [0.0, 0.1, 0.8, 1.0],
-        ).createShader(bounds);
-      },
-      blendMode: BlendMode.dstIn,
-      child: Image.network(
-        'https://anhnail.com/wp-content/uploads/2024/10/Hinh-gai-xinh-Viet-Nam-ngau.jpg',
-        width: Common.screen(context, be: Be.width) * 0.9,
-        height: Common.screen(context, be: Be.width) * 0.9,
-        fit: BoxFit.cover,
+    return WidgetPopupItem(
+      boxItem: _detail(),
+      child: ShaderMask(
+        shaderCallback: (Rect bounds) {
+          return LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.black.opacity0,
+              Colors.black,
+              Colors.black,
+              Colors.black.opacity0,
+            ],
+            stops: const [0.0, 0.1, 0.8, 1.0],
+          ).createShader(bounds);
+        },
+        blendMode: BlendMode.dstIn,
+        child: Image.network(
+          'https://anhnail.com/wp-content/uploads/2024/10/Hinh-gai-xinh-Viet-Nam-ngau.jpg',
+          width: Utilities.screen(context).w * 0.9,
+          height: Utilities.screen(context).w * 0.9,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget _detail() {
+    return SizedBox(
+      width: Utilities.screen(context).w,
+      height: Utilities.screen(context).h * 0.7,
+      child: PageView.builder(
+        itemCount: controller.list.length,
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (context, index) {
+          return Image.network(
+            controller.list[index],
+            fit: BoxFit.contain,
+          );
+        },
       ),
     );
   }
 
   Widget _boxImageAndChart() {
     return SizedBox(
-      height: Common.screen(context, be: Be.width)/2,
+      height: Utilities.screen(context).w / 2,
       child: Row(children: [
         WidgetImageStack(
           color: os.colorUi.fade,

@@ -98,7 +98,7 @@ class SparklePainter extends CustomPainter {
     final paint = Paint()..color = Colors.white;
 
     for (var sparkle in sparkles) {
-      paint.color = Colors.white.withOpacity(sparkle.opacity);
+      paint.color = Colors.white.withValues(alpha: sparkle.opacity);
       _drawFourPointStar(canvas, sparkle.position, sparkle.scale, paint);
     }
   }

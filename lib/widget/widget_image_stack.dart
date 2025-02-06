@@ -23,9 +23,7 @@ class _WidgetImageStackState extends State<WidgetImageStack> {
   void initState() {
     _newList = (widget.images ?? []).reversed.toList();
     _pageController.addListener(() {
-      setState(() {
-        _currentPage = _pageController.page ?? 0;
-      });
+      setState(() => _currentPage = _pageController.page ?? 0);
     });
     super.initState();
   }
@@ -89,7 +87,13 @@ class _WidgetImageStackState extends State<WidgetImageStack> {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      Image.network(_newList[index], fit: BoxFit.cover),
+                      Opacity(
+                        opacity: _scale(index),
+                        child: CachedNetworkImage(
+                          imageUrl: _newList[index],
+                          fit: BoxFit.cover,
+                        )
+                      ),
                       BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: _blur(index), sigmaY: _blur(index)),
                           child: const SizedBox()
@@ -118,7 +122,7 @@ class _WidgetImageStackState extends State<WidgetImageStack> {
         color: const Color(0xFF545353),
         boxShadow: [
           BoxShadow(
-            color: MyColor.black.withOpacity(0.5),
+            color: MyColor.black.opacity5,
             blurRadius: 9,
             spreadRadius: 5
           )

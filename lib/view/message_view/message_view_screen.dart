@@ -14,34 +14,14 @@ class MessageViewScreen extends BaseView<MessageViewController> {
 
   @override
   Widget build() {
-    return Scaffold(
-      backgroundColor: os.colorUi.deep,
-      body: Stack(
+    return WidgetBodyScroll(
+      buildType: BuildTypeData.base(
         children: [
-          ListView.builder(
-            itemCount: 10,
-            physics: const BouncingScrollPhysics().applyTo(const AlwaysScrollableScrollPhysics()),
-            itemBuilder: (context, index) {
-              return Text(index.toString());
-            }
-          ),
-          ClipRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
-              child: SizedBox(
-                height: 50.w,
-                width: double.infinity,
-                child: ColoredBox(
-                  color: MyColor.red.withOpacity(0.0),
-                  child: IconButton(
-                    onPressed: ()=> Navigator.pop(context),
-                    icon: Icon(CupertinoIcons.back)
-                  ),
-                ),
-              ),
-            ),
-          )
-        ],
+          Center(child: ElevatedButton(
+            onPressed: ()=> controller.startAnimation(), 
+            child: Text("data"),
+          ))
+        ]
       ),
     );
   }

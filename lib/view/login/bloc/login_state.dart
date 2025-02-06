@@ -12,3 +12,9 @@ class LoginState {
     this.isShowPass = false
   });
 }
+
+class LoadLoginState extends LoginState {}
+
+class SuccessLoginState extends LoginState {
+  SuccessLoginState() : super();
+}

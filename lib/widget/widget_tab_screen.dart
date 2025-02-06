@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import '../base_project/package_widget.dart';
 
-// TODO: SCREEN
 class WidgetTabScreen extends StatefulWidget {
   final List<WidgetListPage> listPage;
   final WidgetDrawer drawer;
@@ -24,7 +23,7 @@ class WidgetTabScreen extends StatefulWidget {
 class WidgetTabScreenState extends State<WidgetTabScreen> with SingleTickerProviderStateMixin {
 
   late _WidgetTabController _controller;
-  late AnimationController animationController;
+  static late AnimationController animationController;
   late Animation<double> _animation;
 
   @override
@@ -38,10 +37,14 @@ class WidgetTabScreenState extends State<WidgetTabScreen> with SingleTickerProvi
     });
     _animation = CurvedAnimation(
       parent: animationController,
-      curve: Curves.ease,
+      curve: Curves.easeOutCubic,
     );
     super.initState();
   }
+
+  static void _open() => animationController.forward();
+
+  static void _close() => animationController.reverse();
 
   @override
   void dispose() {
@@ -93,40 +96,19 @@ class WidgetTabScreenState extends State<WidgetTabScreen> with SingleTickerProvi
       scale: 1 - state.scaleValue/20,
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: Stack(
-          children: [
-            IndexedStack(
-              index: state.currentIndex,
-              children: List.generate(widget.listPage.length, (index) {
-                final isVisible = index == state.currentIndex;
-                return TweenAnimationBuilder(
-                  duration: const Duration(milliseconds: 300),
-                  tween: Tween<double>(begin: 100, end: _controller.valueSlate(isVisible, index, state)),
-                  curve: Curves.ease,
-                  builder: (context, value, child) {
-                    return Transform.translate(
-                      offset: Offset(value, 0),
-                      child: Opacity(
-                        opacity: 1 - (value.abs()/100),
-                        child: widget.listPage[index].page
-                      ),
-                    );
-                  }
-                );
-              }),
+        body: Stack(children: [
+          widget.listPage[state.currentIndex].page,
+          Positioned(
+            bottom: 20.w,
+            right: 17.w,
+            left: 17.w,
+            child: _WidgetTabMenu(
+                state: state,
+                controller: _controller,
+                listPage: widget.listPage,
             ),
-            Positioned(
-              bottom: 20.w,
-              right: 17.w,
-              left: 17.w,
-              child: _WidgetTabMenu(
-                  state: state,
-                  controller: _controller,
-                  listPage: widget.listPage,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ]),
       ),
     );
   }
@@ -137,10 +119,10 @@ class WidgetTabScreenState extends State<WidgetTabScreen> with SingleTickerProvi
       child: GestureDetector(
         onTap: ()=> animationController.reverse(),
         child: ColoredBox(
-          color: MyColor.black.withOpacity(state.scaleValue/2),
+          color: MyColor.black.withValues(alpha: state.scaleValue/2),
           child: SizedBox(
-            height: Common.screen(context, be: Be.height),
-            width: Common.screen(context, be: Be.width),
+            height: Utilities.screen(context).h,
+            width: Utilities.screen(context).w,
           ),
         )
       ),
@@ -159,20 +141,20 @@ class WidgetTabScreenState extends State<WidgetTabScreen> with SingleTickerProvi
             child: child,
           );
         },
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(10.w, 50.w, 0, 10.w),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(13.w),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                width: widget.drawer.width,
-                decoration: BoxDecoration(
-                  color: widget.drawer.backGroundColor?.withOpacity(0.6) ?? Colors.black45,
-                  border: Border.all(color: widget.drawer.backGroundColor ?? MyColor.black, width: 2),
-                  borderRadius: BorderRadius.circular(13.w)
+        child: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: widget.drawer.width,
+              decoration: BoxDecoration(
+                color: widget.drawer.backGroundColor?.opacity5 ?? Colors.black45,
+                border: Border(
+                  right: BorderSide(color: MyColor.grey.opacity2, width: 1)
                 ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(20.w, 10.w, 10.w, 10.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -204,7 +186,6 @@ class WidgetTabScreenState extends State<WidgetTabScreen> with SingleTickerProvi
   }
 }
 
-// TODO: CONTROLLER
 class _WidgetTabController {
   BuildContext context;
   List<WidgetListPage> listPage;
@@ -213,20 +194,6 @@ class _WidgetTabController {
   void navigationHandling(int index, _WidgetState state) {
     bool canAct = false;
     context.read<WidgetBloc>().add(_WidgetEvent(currentIndex: index, canAct: canAct));
-  }
-
-  double valueSlate(bool isVisible, int index, _WidgetState state) {
-    if(!isVisible) {
-      if (index < state.currentIndex) {
-        return -100;
-      } else if (index > state.currentIndex) {
-        return 100;
-      } else {
-        return 0;
-      }
-    } else {
-      return 0;
-    }
   }
 
   void _showContent(String title) {
@@ -250,7 +217,6 @@ class _WidgetTabController {
   }
 }
 
-// TODO: MENU
 class _WidgetTabMenu extends StatelessWidget {
   final _WidgetState state;
   final _WidgetTabController controller;
@@ -263,7 +229,7 @@ class _WidgetTabMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double withBtn = (Common.screen(context, be: Be.width) - 46.w)/controller.listPage.length;
+    double withBtn = (Utilities.screen(context).w - 46.w)/controller.listPage.length;
     return ClipRRect(
       borderRadius: BorderRadius.circular(100.w),
       child: BackdropFilter(
@@ -272,8 +238,8 @@ class _WidgetTabMenu extends StatelessWidget {
           height: 50.w,
           padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 6.w),
           decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.withOpacity(0.4)),
-              color: MyColor.black.withOpacity(0.4),
+              border: Border.all(color: Colors.grey.opacity4),
+              color: MyColor.black.opacity4,
               borderRadius: BorderRadius.circular(100.w)
           ),
           child: Stack(
@@ -284,7 +250,7 @@ class _WidgetTabMenu extends StatelessWidget {
                 width: withBtn,
                 height: double.infinity,
                 decoration: BoxDecoration(
-                    color: MyColor.pink.withOpacity(0.7),
+                    color: MyColor.pink.opacity7,
                     borderRadius: BorderRadius.circular(100.w)
                 ),
                 margin: EdgeInsets.only(left: withBtn * state.currentIndex),
@@ -304,7 +270,7 @@ class _WidgetTabMenu extends StatelessWidget {
                             children: [
                               Transform.translate(
                                   offset: Offset(0, -(value * 5).w),
-                                  child: Center(child: Icon(listPage[index].bottomIcon, color: MyColor.white.withOpacity(0.7)))
+                                  child: Center(child: Icon(listPage[index].bottomIcon, color: MyColor.white.opacity7))
                               ),
                               Transform.translate(
                                   offset: Offset(0, value * 9.w),
@@ -331,7 +297,6 @@ class _WidgetTabMenu extends StatelessWidget {
   }
 }
 
-// TODO: BLOC STATE MANAGER
 class _WidgetState {
   bool canAct;
   int currentIndex;
@@ -368,7 +333,6 @@ class WidgetBloc extends Bloc<_WidgetEvent, _WidgetState> {
   }
 }
 
-// TODO: MODEL PAGE PARAMS
 class WidgetListPage {
   Widget page;
   IconData bottomIcon;
@@ -377,21 +341,19 @@ class WidgetListPage {
   WidgetListPage({required this.page, required this.bottomIcon, required this.name});
 }
 
-// TODO: MODEL DRAWER
 class WidgetDrawer {
   Widget header;
   Color? colorHeader, backGroundColor;
   List<Widget> children;
   double width;
 
-  static void open(BuildContext context)=> context.findAncestorStateOfType<WidgetTabScreenState>()?.animationController.forward();
+  static void open()=> WidgetTabScreenState._open();
 
-  static void close(BuildContext context)=> context.findAncestorStateOfType<WidgetTabScreenState>()?.animationController.reverse();
+  static void close() => WidgetTabScreenState._close();
 
   WidgetDrawer({required this.children, required this.header, this.width = 250, this.colorHeader, this.backGroundColor});
 }
 
-// TODO: MANAGER ON BACK APP
 class _OverlayContentWidget extends StatefulWidget {
   final VoidCallback onClose;
   final VoidCallback resetCanPop;

@@ -3,6 +3,7 @@ import 'package:harmony/common/multi_bloc.dart';
 import 'package:harmony/router/app_router.dart';
 import 'package:harmony/view/login/login_screen.dart';
 
+import 'base_project/monitor_router_page.dart';
 import 'common/firebase_option.dart';
 
 void main() async {
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
       builder: (_, child) {
         return MaterialApp(
           title: 'Flutter Demo',
+          navigatorObservers: [MonitorRouterPage()],
           debugShowCheckedModeBanner: false,
           onGenerateRoute: AppRouter.generateRoute,
           home: child

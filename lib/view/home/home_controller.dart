@@ -1,14 +1,14 @@
 import 'package:harmony/base_project/package_widget.dart';
 import 'package:harmony/view/home/bloc/home_bloc.dart';
 
-class HomeController extends BaseController {
+final class HomeController extends BaseController {
   HomeController(super.context);
 
   final double heightAppbar = 100.w;
   late final SwipableStackController stackController;
 
-  late BlurImageStackBehind behind = BlurImageStackBehind(context, stackController);
-  late ScaleImageStackBehind scale = ScaleImageStackBehind(context, stackController);
+  late BlurImageStackBehind behind = BlurImageStackBehind(this);
+  late ScaleImageStackBehind scale = ScaleImageStackBehind(this);
 
   @override
   void onInitState() {
@@ -30,17 +30,17 @@ class HomeController extends BaseController {
   }
 
   List<Color> f = [MyColor.red, MyColor.black, MyColor.pink];
+
 }
 
 class BlurImageStackBehind {
-  BuildContext context;
-  final SwipableStackController _stackController;
-  BlurImageStackBehind(this.context, this._stackController);
+  final HomeController _controller;
+  BlurImageStackBehind(this._controller);
 
   double value(double positioned, int index) {
     double result = 20 - positioned * 4;
     result = result > 0 ? result : 0;
-    if(_stackController.currentIndex == index) {
+    if(_controller.stackController.currentIndex == index) {
       return 0;
     } else {
       return result;
@@ -49,14 +49,13 @@ class BlurImageStackBehind {
 }
 
 class ScaleImageStackBehind {
-  BuildContext context;
-  final SwipableStackController _stackController;
-  ScaleImageStackBehind(this.context, this._stackController);
+  final HomeController _controller;
+  ScaleImageStackBehind(this._controller);
 
   double value(double positioned, int index) {
     double result = 0.3 - positioned * 0.1;
     result = result.clamp(0.0, 0.3);
-    if(_stackController.currentIndex == index) {
+    if(_controller.stackController.currentIndex == index) {
       return 0.0;
     } else {
       return result;

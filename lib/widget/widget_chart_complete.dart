@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import '../base_project/package_widget.dart';
 
 class WidgetChartComplete extends StatelessWidget {

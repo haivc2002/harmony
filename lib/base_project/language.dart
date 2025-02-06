@@ -16,6 +16,18 @@ class Language {
   String contentItemMonopoly;
   String contentNewsSeeMatches;
   String contentNewStatus;
+  String titleLogout;
+  String message;
+  String contentLogOut;
+  String ok;
+  String no;
+  String setting;
+  String language;
+  String changeLanguage;
+  String isHttp;
+  String isDueServer;
+  String isNotConnect;
+  String isTimeOut;
 
   Language({
     required this.hasAccount,
@@ -34,7 +46,19 @@ class Language {
     required this.contentOutApp,
     required this.contentItemMonopoly,
     required this.contentNewsSeeMatches,
-    required this.contentNewStatus
+    required this.contentNewStatus,
+    required this.titleLogout,
+    required this.message,
+    required this.contentLogOut,
+    required this.ok,
+    required this.no,
+    required this.setting,
+    required this.language,
+    required this.changeLanguage,
+    required this.isHttp,
+    required this.isDueServer,
+    required this.isNotConnect,
+    required this.isTimeOut,
   });
 
   factory Language.fromMap(Map<String, String> map) {
@@ -56,6 +80,18 @@ class Language {
         contentItemMonopoly: map['contentItemMonopoly'] ?? '',
         contentNewsSeeMatches: map['contentNewsSeeMatches'] ?? '',
         contentNewStatus: map['contentNewStatus'] ?? '',
+        titleLogout: map['titleLogout'] ?? '',
+        message: map['message'] ?? '',
+        contentLogOut: map['contentLogOut'] ?? '',
+        ok: map['ok'] ?? '',
+        no: map['no'] ?? '',
+        setting: map['setting'] ?? '',
+        language: map['language'] ?? '',
+        changeLanguage: map['changeLanguage'] ?? '',
+        isHttp: map['isHttp'] ?? '',
+        isDueServer: map['isDueServer'] ?? '',
+        isNotConnect: map['isNotConnect'] ?? '',
+        isTimeOut: map['isTimeOut'] ?? '',
     );
   }
 
@@ -78,6 +114,18 @@ class Language {
       'contentItemMonopoly': contentItemMonopoly,
       'contentNewsSeeMatches': contentNewsSeeMatches,
       'contentNewStatus': contentNewStatus,
+      'titleLogout': titleLogout,
+      'message': message,
+      'contentLogOut': contentLogOut,
+      'ok': ok,
+      'no': no,
+      'setting': setting,
+      'language': language,
+      'changeLanguage': changeLanguage,
+      'isHttp': isHttp,
+      'isDueServer': isDueServer,
+      'isNotConnect': isNotConnect,
+      'isTimeOut': isTimeOut,
     };
   }
 }

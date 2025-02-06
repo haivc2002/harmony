@@ -8,6 +8,7 @@ import '../view/match/match_screen.dart';
 import '../view/message/message_screen.dart';
 import '../view/message_view/message_view_screen.dart';
 import '../view/profile/profile_screen.dart';
+import '../view/setting/setting_screen.dart';
 
 class AppRouter {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -59,6 +60,12 @@ class AppRouter {
         return CupertinoPageRoute(
             settings: settings,
             builder: (_) => const ExplorerScreen()
+        );
+
+      case SettingScreen.router:
+        return CupertinoPageRoute(
+            settings: settings,
+            builder: (_) => const SettingScreen()
         );
 
       default:

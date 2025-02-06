@@ -4,24 +4,42 @@ import 'package:harmony/view/tab_multi/bloc/tab_multi_bloc.dart';
 class TabMultiController extends BaseController {
   TabMultiController(super.context);
 
-  late bool isDark;
-
-  late final OnChangeUI onChangeUI = OnChangeUI(context);
-
   @override
   void onInitState() {
-    isDark = ThemeUi.dark == Constant.colorUi(Global.getString(Constant.colorGetStore));
+    bool isDark = ThemeUi.dark == colorUi.keyDecode(Global.getString(Constant.colorGetStore));
     context.read<TabMultiBloc>().add(TabMultiEvent(isDark: isDark));
     super.onInitState();
   }
-}
 
-class OnChangeUI extends TabMultiController {
-  OnChangeUI(super.context);
-
-  void perform(bool value) {
+  void onChangeUI(bool value) {
     onChangeColorUi(themeUi: value ? ThemeUi.dark : ThemeUi.light);
     context.read<TabMultiBloc>().add(TabMultiEvent(isDark: value));
   }
 
+  late OnLogOut onLogOut = OnLogOut(this);
+
+}
+
+class OnLogOut {
+  TabMultiController controller;
+  OnLogOut(this.controller);
+
+  void perform(BaseState os) {
+    WidgetDrawer.close();
+    Utilities.dialog(
+      controller.context,
+      title: os.language.message,
+      content: Text(os.language.contentLogOut),
+      actions: [
+        Utilities.dialog.action(
+          onPressed: ()=> Navigator.pop(controller.context),
+          child: Text(os.language.no, style: Styles.def.setColor(MyColor.red).setTextSize(14.sp))
+        ),
+        Utilities.dialog.action(
+          onPressed: ()=> Navigator.pop(controller.context),
+          child: Text(os.language.ok)
+        )
+      ]
+    );
+  }
 }

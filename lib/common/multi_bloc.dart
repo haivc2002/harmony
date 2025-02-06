@@ -18,6 +18,7 @@ class MultiBloc extends StatelessWidget {
         BlocProvider(create: (context) => LoginBloc(), lazy: true),
         BlocProvider(create: (context) => TabMultiBloc(), lazy: true),
         BlocProvider(create: (context) => HomeBloc(), lazy: true),
+        BlocProvider(create: (context) => ToggleBlur(), lazy: true),
       ],
       child: child
     );

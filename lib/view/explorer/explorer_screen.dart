@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:harmony/base_project/package_widget.dart';
 import 'package:harmony/view/explorer/explorer_controller.dart';
 import 'package:harmony/view/match/match_screen.dart';
@@ -106,7 +107,7 @@ class ExplorerScreen extends BaseView<ExplorerController> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.w),
               color: os.colorUi.fade,
-              border: Border.all(color: MyColor.grey.withOpacity(0.2), width: 2.w),
+              border: Border.all(color: MyColor.grey.opacity2, width: 2.w),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,8 +170,8 @@ class ExplorerScreen extends BaseView<ExplorerController> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: MyColor.white,
-            border: Border.all(color: MyColor.black.withOpacity(0.3)),
-            boxShadow: [BoxShadow(color: os.colorUi.reverse.withOpacity(0.2), blurRadius: 10)]
+            border: Border.all(color: MyColor.black.opacity3),
+            boxShadow: [BoxShadow(color: os.colorUi.reverse.opacity2, blurRadius: 10)]
           ),
           child: Padding(
             padding: EdgeInsets.all(4.w),
